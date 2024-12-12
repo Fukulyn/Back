@@ -139,4 +139,33 @@ export class UserService extends Service {
         return exist
     }
 
+
+    /**
+     * 
+     * 刪除一筆用戶
+     * @param id: 用戶_id
+     * @returns
+     */
+    public async deleteById(id:string){
+
+        const resp:resp<any> = {
+            code: 200,
+            message: "",
+            body: undefined
+        }
+        try{
+            const res = await studentsModel.deleteOne({_id:id});
+            resp.message = "sucess";
+        }catch(error){
+            resp.message = error as string;
+            resp.code = 500;
+        }
+        
+        return resp;
+    }
+
+    public async updateNameByID(id:string,name:string){
+        
+    }
+
 }
