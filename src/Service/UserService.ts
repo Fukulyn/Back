@@ -6,6 +6,8 @@ import { Document } from "mongoose"
 import { MongoDB } from "../utils/MongoDB";
 import { DBResp } from "../interfaces/DBResp";
 import { resp } from "../utils/resp";
+import { destType } from "compressing";
+import { error } from "console";
 
 type seatInfo = {
     schoolName:string,
@@ -155,7 +157,7 @@ export class UserService extends Service {
         }
         try{
             const res = await studentsModel.deleteOne({_id:id});
-            resp.message = "sucess";
+            resp.message = "success";
         }catch(error){
             resp.message = error as string;
             resp.code = 500;
@@ -163,9 +165,36 @@ export class UserService extends Service {
         
         return resp;
     }
-
+    
+/**
+ * 更新一個用戶名
+ * @param id uid
+ * @param name 新明字
+ * @returns 狀態
+ */
     public async updateNameByID(id:string,name:string){
-        
+        const resp:resp<DBResp<Student>|string> = {
+            code: 200,
+            message: "",
+            body: ""
+        }
+        const user = await studentsModel.findById(id)
+        if (user) {
+            try{
+            user.name = name;
+            await user.save();
+            resp.body = user;
+            resp.message = "update success";
+            }catch (error){
+                resp.code = 500;
+                resp.message = "server error";
+            }
+        }else{  
+            resp.code = 404;
+            resp.message = "User not found";
+        }
+
+        return resp;
     }
 
 }
