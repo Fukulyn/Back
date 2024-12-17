@@ -39,34 +39,16 @@ export class UserController extends Contorller {
         const resp = await this.service.insertOne(Request.body)
         Response.status(resp.code).send(resp)
     }
-
-    public async deletedById(Request: Request, Response: Response){
-        const resp = await this.service.deletedById(Request.query.id as string);
-        Response.status(resp.code).send(resp);
-    }
-
     public async deletedByName(Request: Request, Response: Response){
         const resp = await this.service.deletedByName(Request.query.name as string);
         Response.status(resp.code).send(resp);
     }
-
     public async updateByName(Request: Request, Response: Response){
         const resp = await this.service.updateByName(Request.query.name as string, Request.body);
         Response.status(resp.code).send(resp);
     }
-
-    public async updateById(Request: Request, Response: Response){
-        const resp = await this.service.updateById(Request.query.id as string, Request.body);
-        Response.status(resp.code).send(resp);
-    }
-
     public async findByName(Request: Request, Response: Response){
         const resp = await this.service.findByName(Request.query.name as string);
-        Response.status(resp.code).send(resp);
-    }
-
-    public async findById(Request: Request, Response: Response){
-        const resp = await this.service.findById(Request.query.id as string);
         Response.status(resp.code).send(resp);
     }
 }
