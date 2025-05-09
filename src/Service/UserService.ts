@@ -1,7 +1,7 @@
 import { Service } from "../abstract/Service";
-import { Student } from "../interfaces/Student";
+import { Pal } from "../interfaces/Pal";
 import { logger } from "../middlewares/log";
-import { studentsModel } from "../orm/schemas/studentSchemas";
+import { PalModel } from "../orm/schemas/PalSchema";
 import { Document, Types } from "mongoose"
 import { MongoDB } from "../utils/MongoDB";
 import { DBResp } from "../interfaces/DBResp";
@@ -18,9 +18,9 @@ export class UserService extends Service {
      * 
      * @returns 
      */
-    public async getAllStudents(): Promise<Array<DBResp<Student>>|undefined> {
+    public async getAllPals(): Promise<Array<DBResp<Pal>>|undefined> {
         try {
-            const res:Array<DBResp<Student>> = await studentsModel.find({});
+            const res:Array<DBResp<Pal>> = await PalModel.find({});
             return res;
         } catch (error) {
             return undefined;
@@ -33,15 +33,15 @@ export class UserService extends Service {
      * @param info 學生資訊
      * @returns resp
      */
-    public async insertOne(info: Student): Promise<resp<DBResp<Student> | undefined>> {
-        const resp: resp<DBResp<Student> | undefined> = {
+    public async insertOne(info: Pal): Promise<resp<DBResp<Pal> | undefined>> {
+        const resp: resp<DBResp<Pal> | undefined> = {
             code: 200,
             message: "",
             body: undefined
         };
         try {
             // 驗證用戶
-            const nameValidator = await this.userNameValidator(info.userName);
+            const nameValidator = await this.userNameValidator(info.name);
             if (nameValidator !== "驗證通過") {
                 resp.code = 403;
                 resp.message = nameValidator;
@@ -182,7 +182,6 @@ export class UserService extends Service {
             const updateFields = { ...updateData };
             delete updateFields._id;
             delete updateFields.sid;
-            delete updateFields.absences;
     
             // findOneAndUpdate => 資料更新 返回更新後資料
             const user = await studentsModel.findOneAndUpdate(
